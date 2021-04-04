@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+    <data-source source="LOCAL" name="BMS@IRNEF" uuid="13b69c39-d0ec-4350-aedc-d3d948819682">
+      <driver-ref>sqlserver.ms</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.microsoft.sqlserver.jdbc.SQLServerDriver</jdbc-driver>
+      <jdbc-url>jdbc:sqlserver://IRNEF\SQLEXPRESS;database=BMS</jdbc-url>
+    </data-source>
+    <data-source source="LOCAL" name="test_bd" uuid="999954fe-e3fb-4d50-b128-c3b898c4d7d2">
+      <driver-ref>sqlserver.ms</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.microsoft.sqlserver.jdbc.SQLServerDriver</jdbc-driver>
+      <jdbc-url>jdbc:sqlserver://IRNEF\SQLEXPRESS;database=test_bd</jdbc-url>
+    </data-source>
+    <data-source source="LOCAL" name="test_bd2" uuid="70cb2731-7c70-40a0-a840-dfe37f52cb9b">
+      <driver-ref>sqlserver.ms</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.microsoft.sqlserver.jdbc.SQLServerDriver</jdbc-driver>
+      <jdbc-url>jdbc:sqlserver://IRNEF\SQLEXPRESS;database=test_bd</jdbc-url>
+    </data-source>
+  </component>
+</project>
