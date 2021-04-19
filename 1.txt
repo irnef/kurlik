@@ -1,0 +1,6 @@
+Имя таблицы: Company
+id, type: INTEGER
+name, type: VARCHAR(1024)
+description, type: VARCHAR
+isMain, type: BINARY(1)
+location, type: VARCHAR(1024)
