@@ -1,5 +1,6 @@
 import telebot
 import test_bd
+from telebot import types
 
 bot = telebot.TeleBot('1641457298:AAEXwjDb83msBchf8e7UxPLYCvBq8tG-Uec')
 bot.send_message(392812944, 'Запуск')  # отправка сообщения по id пользователя
@@ -11,6 +12,7 @@ bot.send_message(392812944, 'Запуск')  # отправка сообщени
 dataReg = []
 keyboard1 = telebot.types.ReplyKeyboardMarkup(True, True)
 keyboard1.row('Зарегистрироваться', 'Авторизироваться', 'Гость')
+
 
 
 @bot.message_handler(commands=['start'])
@@ -55,7 +57,7 @@ def send_text(message):
         bot.send_message(message.chat.id, 'Введите свою должность (1 - управляющая, 0 - нет): ')
         register(messagel)
     elif messagel[len(messagel) - 5] == 'Зарегистрироваться':
-        bot.send_message(message.chat.id, 'Введите свой департамент (Разработка): ')
+        bot.send_message(message.chat.id, 'Введите id своего департамента (1): ')
         register(messagel)
     elif messagel[len(messagel) - 6] == 'Зарегистрироваться':
         bot.send_message(message.chat.id, 'Введите свой email: ')

@@ -1,8 +1,8 @@
 from sqlalchemy import create_engine, MetaData, Table, text
+from datetime import datetime
 from sqlalchemy.connectors import pyodbc
-
-# import tbot
-
+import difflib
+import numpy as np
 server = 'IRNEF\SQLEXPRESS'
 # database = 'test_bd'
 database = 'BMS'
@@ -33,6 +33,15 @@ def makeMeta(engine):
 def getScripts(metadata, engine):
     tables_n = []  # имена таблиц
     tables = []  # объекты таблиц
+    currentDate = datetime.now().date()
+    currentTime = datetime.now().time()
+    # dt = 'dt'+str(currentDateTime.year)+str(currentDateTime.month)+str(currentDateTime.day)
+    # time = 't'+str(currentDateTime.hour)+str(currentDateTime.minute)+str(currentDateTime.second)
+    print(currentDate)
+    fileName = str(currentDate) + 't' + str(currentTime.hour) + '-' + str(currentTime.minute) + '-' + str(
+        currentTime.second) + ".txt"
+    # path = "C:\\Users\\user\\Documents\\scripts_data"
+    file = open(fileName, "w")
     keys = metadata.tables.keys()  # получение наименований таблиц
     for key in keys:
         tables_n.append(key)  # запись наименований таблиц в список
@@ -42,9 +51,13 @@ def getScripts(metadata, engine):
             name_t = tables_n[n]
             table = Table(name_t, metadata, autoload=True, autoload_with=engine)
             # print('Имя таблицы: ', tables_n[n])  # вывод информации о всех колонках каждой таблицы
-            # for j in table.columns:
-            #     print(j.name, j.type)
-            # print()
+            file.write('Имя таблицы: ' + tables_n[n] + '\n')
+            for j in table.columns:
+                #   print(j.name, j.type)
+                file.write(str(j.name) + ', type: ' + str(j.type) + '\n')
+
+    file.close()
+    # print()
 
 
 tableName = 'Users'
@@ -70,7 +83,11 @@ def insData(tableName, tableColumns, values):
     #  "'"+str(values[5])+"','" + str(values[6])+"')")
 
     # t = text("insert into "+ tableName +" values ('"+ str(values[0]) +"',"+"'qwe', 'qwe', 1, 1, '123', '123', '123')")
-    test = "insert into " + tableName + " values ('"+str(values[0])+"', '"+str(values[1])+"', '"+str(values[2])+"', "+str(values[3])+", "+str(values[4])+", '"+str(values[5])+"', '"+str(values[6])+"','"+str(values[7])+"')"
+    test = "insert into " + tableName + tableColumns + " values ('" + str(
+        values[0]) + "', '" + str(values[1]) + "', '" + str(
+        values[2]) + "', " + str(values[3]) + ", " + str(values[4]) + ", '" + str(values[5]) + "', '" + str(
+        values[6]) + "','" + str(values[7]) + "')"
+
     t = text(test)
     result = conn.execute(t)
     # print(result.fetchall()) # отрабатывает при запуске select
@@ -78,14 +95,34 @@ def insData(tableName, tableColumns, values):
     return result
 
 
+# def compareFiles(file1, file2):  # выводит в 3 файл то, что в первом входном отличаетя от второго, удаленные элементы
+#     # не выводит
+#     with open(file1, 'r') as f1:
+#         d = set(f1.readlines())
+#
+#     with open(file2, 'r') as f2:
+#         e = set(f2.readlines())
+#
+#     open('file3.txt', 'a').close()
+#     with open('file3.txt', 'a') as f:
+#         for line in list(d - e):
+#             f.write(line)
+
+
+def compareDiff(file1, file2):
+    diff = difflib.ndiff(open(file1).readlines(), open(file2).readlines())
+    #print(*diff)
+    file = open('file3.txt', 'w')
+    for i in diff:
+        file.write(i)
+
+
+compareDiff('1.txt', '2.txt')
+
 engine = makeEngine(server, database)
 conn = makeConnection(engine)
 metadata = makeMeta(engine)
 getScripts(metadata, engine)
-# while 1:
-#     if tbot.done:
-#         print('попал') # не попадает
-#         insData(tableName, tableColumns, tbot.dataReg)
 
 # c = metadata.tables[j]
 # for i in c:
