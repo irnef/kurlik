@@ -1,6 +1,13 @@
-Имя таблицы: Company
+Имя таблицы: Category
 id, type: INTEGER
-name, type: VARCHAR(512)
-description, type: VARCHAR
-isMain, type: BINARY(1)
-location, type: VARCHAR(1024)
+nameCategory, type: VARCHAR(30) COLLATE "Cyrillic_General_CI_AS"
+Имя таблицы: Customer
+id, type: INTEGER
+FIO, type: VARCHAR(100) COLLATE "Cyrillic_General_CI_AS"
+login, type: VARCHAR(10) COLLATE "Cyrillic_General_CI_AS"
+password, type: VARCHAR(15) COLLATE "Cyrillic_General_CI_AS"
+dtBirth, type: DATE
+idGender, type: INTEGER
+Имя таблицы: Gender
+id, type: INTEGER
+nameGender, type: VARCHAR(10) COLLATE "Cyrillic_General_CI_AS"

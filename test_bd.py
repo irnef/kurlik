@@ -3,9 +3,13 @@ from datetime import datetime
 from sqlalchemy.connectors import pyodbc
 import difflib
 import numpy as np
+from pathlib import Path
+
+# import tbot
+
 server = 'IRNEF\SQLEXPRESS'
-# database = 'test_bd'
-database = 'BMS'
+database_testBD = 'test_bd'
+database_BMS = 'BMS'
 
 
 def makeEngine(server, database):
@@ -57,22 +61,24 @@ def getScripts(metadata, engine):
                 file.write(str(j.name) + ', type: ' + str(j.type) + '\n')
 
     file.close()
+    return file
     # print()
 
 
 tableName = 'Users'
 tableColumns = ' (surName, name, midName, isHead, departmentId, email, phoneNumber, pass) '
-values = " ('Демидов', 'Артем', 'Андреевич', 1, 1, '123','123','123') "
+values1 = " ('Демидов', 'Артем', 'Андреевич', 1, 1, '123','123','123') "
 
 
 def insData(tableName, tableColumns, values):
     # del values[4]
     values[3] = int(values[3])
     values[4] = int(values[4])
-    engine = makeEngine(server, database)
-    conn = makeConnection(engine)
-    metadata = makeMeta(engine)
-    getScripts(metadata, engine)
+    engine_BMS = makeEngine(server, database_BMS)
+    conn_BMS = makeConnection(engine_BMS)
+    # metadata_BMS = makeMeta(engine_BMS)
+
+    # getScripts(metadata_BMS, engine_BMS)
 
     # cursor = conn.cursor()
     # t = text("select * from Users")
@@ -89,7 +95,7 @@ def insData(tableName, tableColumns, values):
         values[6]) + "','" + str(values[7]) + "')"
 
     t = text(test)
-    result = conn.execute(t)
+    result = conn_BMS.execute(t)
     # print(result.fetchall()) # отрабатывает при запуске select
     # conn.commit() # connection object has no attribute 'commit', но без него данные пишутся
     return result
@@ -111,18 +117,19 @@ def insData(tableName, tableColumns, values):
 
 def compareDiff(file1, file2):
     diff = difflib.ndiff(open(file1).readlines(), open(file2).readlines())
-    #print(*diff)
+    # print(*diff)
+    my_file = Path("C:/Users/user/Documents/file3.txt")
     file = open('file3.txt', 'w')
     for i in diff:
         file.write(i)
+    # if my_file.exists():
+    #     print('нашел')
+    #     tbot.sendMes(392812944, 'привет')
 
 
-compareDiff('1.txt', '2.txt')
-
-engine = makeEngine(server, database)
-conn = makeConnection(engine)
-metadata = makeMeta(engine)
-getScripts(metadata, engine)
+engine_testBD = makeEngine(server, database_testBD)  # создание объекта бд, с которой нужно получать скрипты
+conn_testBD = makeConnection(engine_testBD)
+metadata_testBD = makeMeta(engine_testBD)
 
 # c = metadata.tables[j]
 # for i in c:
@@ -139,4 +146,4 @@ getScripts(metadata, engine)
 # for i in result:
 #   print(i)
 
-conn.close()
+conn_testBD.close()

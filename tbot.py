@@ -14,7 +14,6 @@ keyboard1 = telebot.types.ReplyKeyboardMarkup(True, True)
 keyboard1.row('Зарегистрироваться', 'Авторизироваться', 'Гость')
 
 
-
 @bot.message_handler(commands=['start'])
 def start_message(message):
     bot.send_message(message.chat.id, 'Привет, ты написал мне /start', reply_markup=keyboard1)
@@ -57,7 +56,8 @@ def send_text(message):
         bot.send_message(message.chat.id, 'Введите свою должность (1 - управляющая, 0 - нет): ')
         register(messagel)
     elif messagel[len(messagel) - 5] == 'Зарегистрироваться':
-        bot.send_message(message.chat.id, 'Введите id своего департамента (1): ')
+        bot.send_message(message.chat.id, 'Введите id своего департамента (2 - Маркетинг, 3 - Работа с клиентами, '
+                                          '4 - Закупки): ')
         register(messagel)
     elif messagel[len(messagel) - 6] == 'Зарегистрироваться':
         bot.send_message(message.chat.id, 'Введите свой email: ')
@@ -85,6 +85,49 @@ def register(messagel):
         test_bd.insData(test_bd.tableName, test_bd.tableColumns, dataReg)
     print('dataReg', dataReg)
     return dataReg
+
+
+# отправка сообщения по конкреному id
+def sendMes(id, text):
+    bot.send_message(id, text)
+
+
+def sendWarning():
+    file = test_bd.getScripts(test_bd.metadata_testBD, test_bd.engine_testBD)
+    print(file.name)
+    test_bd.compareDiff('2021-04-23t9-11-21.txt', file.name)
+    data_file = []  # сюда попадают все данные из файла изменений
+    send_add = []  # сюда отфильтровываются только данные по добавлению
+    send_del = []  # сюда отфильтровываются только данные по удалению
+    send_change = []  # сюда отфильтровываются только данные по изменению
+    with open('file3.txt', "r") as fin:
+        www = fin.read()
+        for string in www.split('\n'):
+            data_file.append(string)
+
+    for item in data_file:
+        if '^' in item and '?' in item:  # фильтр по изменению
+            send_change.append(item)
+        elif '+' in item and '^' not in item:  # фильтр по добавлению
+            send_add.append(item)
+        elif '-' in item and '^' not in item:  # фильтр по удалению
+            send_del.append(item)
+
+    if len(send_change) != 0:
+        send_change.insert(0, 'Произошло изменение в следующих строках: ')
+        for item in send_change:
+            sendMes(392812944, item)
+    if len(send_add) != 0:
+        send_add.insert(0, 'Произошло добавление следующих строк: ')
+        for item in send_add:
+            sendMes(392812944, item)
+    if len(send_del) != 0:
+        send_del.insert(0, 'Произошло удаление следующих строк: ')
+        for item in send_del:
+            sendMes(392812944, item)
+
+
+sendWarning()
 
 # @bot.message_handler(content_types=['text'])
 # def send_text(message):
