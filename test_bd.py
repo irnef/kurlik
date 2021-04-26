@@ -64,7 +64,7 @@ def getScripts(engine):
 
 
 tableName = 'Users'
-tableColumns = ' (surName, name, midName, isHead, departmentId, email, phoneNumber, pass) '
+tableColumns = ' (surName, name, midName, isHead, departmentId, email, phoneNumber, pass, userIdBot) '
 values1 = " ('Демидов', 'Артем', 'Андреевич', 1, 1, '123','123','123') "
 
 
@@ -90,7 +90,7 @@ def insData(tableName, tableColumns, values):
     test = "insert into " + tableName + tableColumns + " values ('" + str(
         values[0]) + "', '" + str(values[1]) + "', '" + str(
         values[2]) + "', " + str(values[3]) + ", " + str(values[4]) + ", '" + str(values[5]) + "', '" + str(
-        values[6]) + "','" + str(values[7]) + "')"
+        values[6]) + "','" + str(values[7]) + "','" + str(values[8]) + "')"
 
     t = text(test)
     result = conn_BMS.execute(t)
