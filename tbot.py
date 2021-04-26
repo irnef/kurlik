@@ -1,3 +1,5 @@
+import time
+
 import telebot
 import test_bd
 from telebot import types
@@ -92,10 +94,18 @@ def sendMes(id, text):
     bot.send_message(id, text)
 
 
+file_names = ['2021-04-23t17-30-43.txt']
+
+
 def sendWarning():
-    file = test_bd.getScripts(test_bd.metadata_testBD, test_bd.engine_testBD)
+    file = test_bd.getScripts(test_bd.engine_testBD)
     print(file.name)
-    test_bd.compareDiff('2021-04-23t9-11-21.txt', file.name)
+    # test_bd.compareDiff('2021-04-23t9-11-21.txt', file.name)
+    # test_bd.compareDiff('2021-04-23t17-30-43.txt', file.name)
+    test_bd.compareDiff(file_names[0], file.name)
+    file_names.append(file.name)
+    if len(file_names) != 0:
+        del file_names[0]
     data_file = []  # сюда попадают все данные из файла изменений
     send_add = []  # сюда отфильтровываются только данные по добавлению
     send_del = []  # сюда отфильтровываются только данные по удалению
@@ -127,7 +137,10 @@ def sendWarning():
             sendMes(392812944, item)
 
 
-sendWarning()
+timeout = 60
+while True:
+    sendWarning()
+    time.sleep(timeout)
 
 # @bot.message_handler(content_types=['text'])
 # def send_text(message):

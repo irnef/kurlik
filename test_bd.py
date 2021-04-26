@@ -34,31 +34,29 @@ def makeMeta(engine):
     return metadata
 
 
-def getScripts(metadata, engine):
+def getScripts(engine):
+    metadata_testBD = makeMeta(engine_testBD)
     tables_n = []  # имена таблиц
     tables = []  # объекты таблиц
     currentDate = datetime.now().date()
     currentTime = datetime.now().time()
-    # dt = 'dt'+str(currentDateTime.year)+str(currentDateTime.month)+str(currentDateTime.day)
-    # time = 't'+str(currentDateTime.hour)+str(currentDateTime.minute)+str(currentDateTime.second)
     print(currentDate)
     fileName = str(currentDate) + 't' + str(currentTime.hour) + '-' + str(currentTime.minute) + '-' + str(
         currentTime.second) + ".txt"
-    # path = "C:\\Users\\user\\Documents\\scripts_data"
     file = open(fileName, "w")
-    keys = metadata.tables.keys()  # получение наименований таблиц
+    keys = metadata_testBD.tables.keys()  # получение наименований таблиц
     for key in keys:
         tables_n.append(key)  # запись наименований таблиц в список
     # print(tables_n) # печать наименований всех таблиц
-    for i in metadata.tables:
-        for n in range(len(tables_n)):
-            name_t = tables_n[n]
-            table = Table(name_t, metadata, autoload=True, autoload_with=engine)
-            # print('Имя таблицы: ', tables_n[n])  # вывод информации о всех колонках каждой таблицы
-            file.write('Имя таблицы: ' + tables_n[n] + '\n')
-            for j in table.columns:
-                #   print(j.name, j.type)
-                file.write(str(j.name) + ', type: ' + str(j.type) + '\n')
+    # for i in metadata.tables:
+    for n in range(len(tables_n)):
+        name_t = tables_n[n]
+        table = Table(name_t, metadata_testBD, autoload=True, autoload_with=engine)
+        # print('Имя таблицы: ', tables_n[n])  # вывод информации о всех колонках каждой таблицы
+        file.write('Имя таблицы: ' + tables_n[n] + '\n')
+        for j in table.columns:
+            #   print(j.name, j.type)
+            file.write(str(j.name) + ', type: ' + str(j.type) + '\n')
 
     file.close()
     return file
@@ -118,7 +116,7 @@ def insData(tableName, tableColumns, values):
 def compareDiff(file1, file2):
     diff = difflib.ndiff(open(file1).readlines(), open(file2).readlines())
     # print(*diff)
-    my_file = Path("C:/Users/user/Documents/file3.txt")
+    # my_file = Path("C:/Users/user/Documents/file3.txt")
     file = open('file3.txt', 'w')
     for i in diff:
         file.write(i)
@@ -129,7 +127,6 @@ def compareDiff(file1, file2):
 
 engine_testBD = makeEngine(server, database_testBD)  # создание объекта бд, с которой нужно получать скрипты
 conn_testBD = makeConnection(engine_testBD)
-metadata_testBD = makeMeta(engine_testBD)
 
 # c = metadata.tables[j]
 # for i in c:
