@@ -81,12 +81,6 @@ def insData(tableName, tableColumns, values):
     # cursor = conn.cursor()
     # t = text("select * from Users")
 
-    # t = text(
-    #    "insert into " + tableName + " values ('" + str(values[0])+"','" + str(values[1]) +"','"+str(values[2])+"',"+\
-    #   str(values[3]) + ',' + str(values[4]) + ',' + \
-    #  "'"+str(values[5])+"','" + str(values[6])+"')")
-
-    # t = text("insert into "+ tableName +" values ('"+ str(values[0]) +"',"+"'qwe', 'qwe', 1, 1, '123', '123', '123')")
     test = "insert into " + tableName + tableColumns + " values ('" + str(
         values[0]) + "', '" + str(values[1]) + "', '" + str(
         values[2]) + "', " + str(values[3]) + ", " + str(values[4]) + ", '" + str(values[5]) + "', '" + str(
@@ -97,6 +91,20 @@ def insData(tableName, tableColumns, values):
     # print(result.fetchall()) # отрабатывает при запуске select
     # conn.commit() # connection object has no attribute 'commit', но без него данные пишутся
     return result
+
+
+def getData(depsId):
+    engine_BMS1 = makeEngine(server, database_BMS)
+    conn_BMS1 = makeConnection(engine_BMS1)
+    for i in depsId:
+        t = text("select departmentId, userIdBot from Users where departmentId = "+str(i))
+        result = conn_BMS1.execute(t)
+        departIdUser = []
+        for j in result:
+            departIdUser.append(j)
+    return departIdUser
+
+    # print(result.fetchall())  # отрабатывает при запуске select
 
 
 # def compareFiles(file1, file2):  # выводит в 3 файл то, что в первом входном отличаетя от второго, удаленные элементы

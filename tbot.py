@@ -4,6 +4,8 @@ import telebot
 
 import test_bd
 
+import re
+
 bot = telebot.TeleBot('1641457298:AAEXwjDb83msBchf8e7UxPLYCvBq8tG-Uec')
 bot.send_message(392812944, 'Запуск')  # отправка сообщения по id пользователя
 
@@ -43,6 +45,7 @@ def send_text(message):
     #     bot.send_sticker(message.chat.id, 'CAACAgIAAxkBAAMzYE9pEfdhse-QG1icaeF0xRSlYIwAArgAAzDUnRH3ZYYNzwzrFR4E')
     if message.text == 'курлык':
         bot.send_message(message.chat.id, 'привет')
+        test_bd.getData(3)
     elif message.text == 'Гость':
         bot.send_message(message.chat.id, 'Хы')
     elif message.text == 'Зарегистрироваться':
@@ -103,15 +106,18 @@ file_names = ['2021-04-23t17-30-43.txt']  # создаем массив, в ко
 # файлов
 
 
-def sendWarning(userId):
+def sendWarning(tablesDep):
+    userId = 392812944
     file = test_bd.getScripts(test_bd.engine_testBD)
     print(file.name)
-    # test_bd.compareDiff('2021-04-23t9-11-21.txt', file.name)
-    # test_bd.compareDiff('2021-04-23t17-30-43.txt', file.name)
+    with open(file.name, 'r') as f:
+        nums = f.read().splitlines()
+
     test_bd.compareDiff(file_names[0], file.name)
     file_names.append(file.name)
     if len(file_names) != 0:
         del file_names[0]
+
     data_file = []  # сюда попадают все данные из файла изменений
     send_add = []  # сюда отфильтровываются только данные по добавлению
     send_del = []  # сюда отфильтровываются только данные по удалению
@@ -121,6 +127,31 @@ def sendWarning(userId):
         for string in www.split('\n'):
             data_file.append(string)
 
+    namesTables = []
+    columnsTables = []
+    for i, a in enumerate(data_file):
+        if ('^' in a and '?' in a) or ('+' in a and '^' not in a) or ('-' in a and '^' not in a):
+            if 'Имя таблицы:' in a:
+                m = re.match('.\s*(\w+) (\w+): (\w+)', str(a))
+                namesTables.append(m[3])  # заполняем массив имен таблиц
+                # print(m[3])
+                columnsTables.append([a])  # заполняем имена таблиц в массиве колонок (чтобы потом удалить)
+            else:
+                columnsTables[-1].append(a)  # заполняем массив с полями таблиц
+
+    for i, item in enumerate(columnsTables):
+        del columnsTables[i][0]  # удаляем имена таблиц, чтобы были столбцы в чистом виде
+    depIds = []
+
+    for table in namesTables:
+        deps = [x['dep'] for x in tablesDep if x['table_name'] == table]  # получили номера департаментов,
+        # пользователи которых должны получить уведомления
+
+    departIdUser = test_bd.getData(deps)
+    print(departIdUser)
+    #
+    # print(namesTables)  # названия измененных таблиц
+    # print(columnsTables)  # измененные колонки таблиц
     for item in data_file:
         if '^' in item and '?' in item:  # фильтр по изменению
             send_change.append(item)
@@ -141,6 +172,7 @@ def sendWarning(userId):
         send_del.insert(0, 'Произошло удаление следующих строк: ')
         for item in send_del:
             sendMes(392812944, item)
+    return namesTables
 
     # threading.Timer(600, sendWarning()).start()
 
@@ -156,8 +188,13 @@ def call_repeatedly(interval, func, *args):
     return stopped.set
 
 
-userId = 392812944
-call_repeatedly(60, sendWarning, userId)
+namesTablesDep = [{'table_name': 'Category', 'dep': ''}, {'table_name': 'Customer', 'dep': '3'},
+                  {'table_name': 'Fabricator', 'dep': '4'}, {'table_name': 'Gender', 'dep': '3'},
+                  {'table_name': 'Orders', 'dep': '3'}, {'table_name': 'Product', 'dep': '2,4'},
+                  {'table_name': 'Size', 'dep': '4'}, {'table_name': 'Status', 'dep': '3'},
+                  {'table_name': 'Supplier', 'dep': '4'}, {'table_name': 'test_table', 'dep': '3'},
+                  {'table_name': 'tree_sample', 'dep': '2'}]
+call_repeatedly(10, sendWarning, namesTablesDep)
 
 # @bot.message_handler(content_types=['text'])
 # def send_text(message):
@@ -173,8 +210,3 @@ call_repeatedly(60, sendWarning, userId)
 
 
 bot.polling()
-# server = 'IRNEF\SQLEXPRESS'
-# database = 'BMS'
-# tableName = 'Users'
-# tableColumns = ' (surName, name, midName, isHead, departmentId, email, phoneNumber, pass) '
-# test_bd.insData(tableName, tableColumns, dataReg)
