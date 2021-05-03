@@ -129,49 +129,113 @@ def sendWarning(tablesDep):
 
     namesTables = []
     columnsTables = []
+    delTable = []
     for i, a in enumerate(data_file):
         if ('^' in a and '?' in a) or ('+' in a and '^' not in a) or ('-' in a and '^' not in a):
             if 'Имя таблицы:' in a:
-                m = re.match('.\s*(\w+) (\w+): (\w+)', str(a))
-                namesTables.append(m[3])  # заполняем массив имен таблиц
-                # print(m[3])
-                columnsTables.append([a])  # заполняем имена таблиц в массиве колонок (чтобы потом удалить)
+                if '- Имя таблицы: ' in a:
+                    m = re.match('.\s*(\w+) (\w+): (\w+)', str(a))
+                    delTable.append(m[3])
+                    namesTables.append(m[3])  # заполняем массив имен таблиц
+                    # print(m[3])
+                    columnsTables.append([a])  # заполняем имена таблиц в массиве колонок (чтобы потом удалить)
+                else:
+                    m = re.match('.\s*(\w+) (\w+): (\w+)', str(a))
+                    namesTables.append(m[3])  # заполняем массив имен таблиц
+                    # print(m[3])
+                    columnsTables.append([a])  # заполняем имена таблиц в массиве колонок (чтобы потом удалить)
             else:
+                if len(namesTables) == 0:
+                    n = i
+                    while '  Имя таблицы:' not in data_file[n]:
+                        n -= 1
+                    print(data_file[n])
+                    m = re.match('.\s*(\w+) (\w+): (\w+)', str(data_file[n]))
+                    print(m[3])
+                    namesTables.append(m[3])
+                    columnsTables.append(
+                        [data_file[n]])  # заполняем имена таблиц в массиве колонок (чтобы потом удалить)
+                    a = data_file[int(i)]
                 columnsTables[-1].append(a)  # заполняем массив с полями таблиц
-
+    print('del', delTable)
     for i, item in enumerate(columnsTables):
         del columnsTables[i][0]  # удаляем имена таблиц, чтобы были столбцы в чистом виде
-    depIds = []
-
+    deps = []
+    print(namesTables)
     for table in namesTables:
-        deps = [x['dep'] for x in tablesDep if x['table_name'] == table]  # получили номера департаментов,
+        y = [x['dep'] for x in tablesDep if x['table_name'] == table]  # получили номера департаментов,
         # пользователи которых должны получить уведомления
-
+        deps.append(y)
     departIdUser = test_bd.getData(deps)
+
+    print(namesTables)  # индексы названий таблиц соответствуют индексам депратаментов, индексам idUser и даннымв
+    # списке columnsTables
+    print(columnsTables)
+    print(deps)
     print(departIdUser)
     #
     # print(namesTables)  # названия измененных таблиц
     # print(columnsTables)  # измененные колонки таблиц
-    for item in data_file:
-        if '^' in item and '?' in item:  # фильтр по изменению
-            send_change.append(item)
-        elif '+' in item and '^' not in item:  # фильтр по добавлению
-            send_add.append(item)
-        elif '-' in item and '^' not in item:  # фильтр по удалению
-            send_del.append(item)
+    for index, name in enumerate(namesTables):
+        userId = departIdUser[index][1]
+        print(userId)
+        if len(delTable) != 0:
+            for i, it in enumerate(delTable):
+                if delTable[i] == namesTables[index]:
+                    sendMes(userId, 'Таблица ' + namesTables[index] + ' удалена')
+                continue
+        else:
+            for i in columnsTables[index]:
+                if '^' in i and '?' in item:  # фильтр по изменению
+                    send_change.append(i)
+                elif '+' in i and '^' not in item:  # фильтр по добавлению
+                    send_add.append(i)
+                elif '-' in i and '^' not in item:  # фильтр по удалению
+                    send_del.append(i)
+            sendMes(userId, '***************************************')
+            if len(send_change) != 0:
+                send_change.insert(0, 'Произошло изменение в следующих полях: ')
+                for item1 in send_change:
+                    sendMes(userId, item1)
+            sendMes(userId, '***************************************')
+            if len(send_add) != 0:
+                send_add.insert(0, 'Произошло добавление следующих полей: ')
+                send_add.insert(0, 'Таблица: ' + namesTables[index])
+                for item1 in send_add:
+                    sendMes(userId, item1)
+            sendMes(userId, '***************************************')
+            if len(send_del) != 0:
+                send_del.insert(0, 'Произошло удаление следующих полей: ')
+                for item1 in send_del:
+                    sendMes(userId, item1)
+        # if len(delTable) != 0:
+        #     delTable.insert(0, 'Были удалены следующие таблицы: ')
+        #     for item1 in delTable:
+        #         sendMes(userId, item1)
+        send_add = []  # сюда отфильтровываются только данные по добавлению
+        send_del = []  # сюда отфильтровываются только данные по удалению
+        send_change = []  # сюда отфильтровываются только данные по изменению
 
-    if len(send_change) != 0:
-        send_change.insert(0, 'Произошло изменение в следующих строках: ')
-        for item in send_change:
-            sendMes(userId, item)
-    if len(send_add) != 0:
-        send_add.insert(0, 'Произошло добавление следующих строк: ')
-        for item in send_add:
-            sendMes(392812944, item)
-    if len(send_del) != 0:
-        send_del.insert(0, 'Произошло удаление следующих строк: ')
-        for item in send_del:
-            sendMes(392812944, item)
+    # for item in data_file:
+    #     if '^' in item and '?' in item:  # фильтр по изменению
+    #         send_change.append(item)
+    #     elif '+' in item and '^' not in item:  # фильтр по добавлению
+    #         send_add.append(item)
+    #     elif '-' in item and '^' not in item:  # фильтр по удалению
+    #         send_del.append(item)
+    #
+    # if len(send_change) != 0:
+    #     send_change.insert(0, 'Произошло изменение в следующих строках: ')
+    #     for item in send_change:
+    #         sendMes(userId, item)
+    # if len(send_add) != 0:
+    #     send_add.insert(0, 'Произошло добавление следующих строк: ')
+    #     for item in send_add:
+    #         sendMes(392812944, item)
+    # if len(send_del) != 0:
+    #     send_del.insert(0, 'Произошло удаление следующих строк: ')
+    #     for item in send_del:
+    #         sendMes(392812944, item)
     return namesTables
 
     # threading.Timer(600, sendWarning()).start()
@@ -188,9 +252,10 @@ def call_repeatedly(interval, func, *args):
     return stopped.set
 
 
-namesTablesDep = [{'table_name': 'Category', 'dep': ''}, {'table_name': 'Customer', 'dep': '3'},
+namesTablesDep = [{'table_name': 'Category', 'dep': ''}, {'table_name': 'Customer', 'dep': '2'},  # заменить
+                  # департамент таблицы Customer на 3
                   {'table_name': 'Fabricator', 'dep': '4'}, {'table_name': 'Gender', 'dep': '3'},
-                  {'table_name': 'Orders', 'dep': '3'}, {'table_name': 'Product', 'dep': '2,4'},
+                  {'table_name': 'Orders', 'dep': '3'}, {'table_name': 'Product', 'dep': '2'},
                   {'table_name': 'Size', 'dep': '4'}, {'table_name': 'Status', 'dep': '3'},
                   {'table_name': 'Supplier', 'dep': '4'}, {'table_name': 'test_table', 'dep': '3'},
                   {'table_name': 'tree_sample', 'dep': '2'}]

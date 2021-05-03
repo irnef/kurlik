@@ -94,12 +94,14 @@ def insData(tableName, tableColumns, values):
 
 
 def getData(depsId):
+    print(depsId)
+    departIdUser = []
     engine_BMS1 = makeEngine(server, database_BMS)
     conn_BMS1 = makeConnection(engine_BMS1)
-    for i in depsId:
-        t = text("select departmentId, userIdBot from Users where departmentId = "+str(i))
+    for i, dep in enumerate(depsId):
+        dep_s = ''.join(depsId[i])
+        t = text("select departmentId, userIdBot from Users where departmentId = " + dep_s)
         result = conn_BMS1.execute(t)
-        departIdUser = []
         for j in result:
             departIdUser.append(j)
     return departIdUser
@@ -126,8 +128,10 @@ def compareDiff(file1, file2):
     # print(*diff)
     # my_file = Path("C:/Users/user/Documents/file3.txt")
     file = open('file3.txt', 'w')
+    file1 = open('test.txt', 'w')
     for i in diff:
         file.write(i)
+        file1.write(i)
     # if my_file.exists():
     #     print('нашел')
     #     tbot.sendMes(392812944, 'привет')
