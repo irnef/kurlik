@@ -1,2 +1,2 @@
-telbot
+pyTelegranBotAPI=3.6.6
 sqlalchemy
