@@ -23,7 +23,7 @@ def makeConnection(engine):
         conn = engine.connect()
         print("Connection done")
     except ConnectionError as e:
-        print(f"The error '{e}' occurred")
+        print("The error '{e}' occurred")
 
     return conn
 

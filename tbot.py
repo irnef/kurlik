@@ -201,12 +201,25 @@ def sendWarning(tablesDep):
                         # изменению
                         send_change.append(columnsTables[index][ind - 1])
                         send_change.append(columnsTables[index][ind - 2])
-                        # send_change.append(i)
+
+                        for ch in send_change:
+                            if ch in send_add:
+                                x = send_add.index(ch)
+                                del send_add[x]
+                            if ch in send_del:
+                                y = send_del.index(ch)
+                                del send_del[y]
                         break
                     elif '+' in i and '^' not in i:  # фильтр по добавлению
-                        send_add.append(i)
+                        if i not in send_change:
+                            send_add.append(i)
+                        else:
+                            break
                     elif '-' in i and '^' not in i:  # фильтр по удалению
-                        send_del.append(i)
+                        if i not in send_change:
+                            send_del.append(i)
+                        else:
+                            break
                 if len(send_change) != 0:
                     send_change.insert(0, 'Произошло изменение в следующих полях: ')
                     send_change.insert(0, 'Таблица: ' + namesTables[index])
@@ -226,26 +239,6 @@ def sendWarning(tablesDep):
         send_del = []  # сюда отфильтровываются только данные по удалению
         send_change = []  # сюда отфильтровываются только данные по изменению
 
-    # for item in data_file:
-    #     if '^' in item and '?' in item:  # фильтр по изменению
-    #         send_change.append(item)
-    #     elif '+' in item and '^' not in item:  # фильтр по добавлению
-    #         send_add.append(item)
-    #     elif '-' in item and '^' not in item:  # фильтр по удалению
-    #         send_del.append(item)
-    #
-    # if len(send_change) != 0:
-    #     send_change.insert(0, 'Произошло изменение в следующих строках: ')
-    #     for item in send_change:
-    #         sendMes(userId, item)
-    # if len(send_add) != 0:
-    #     send_add.insert(0, 'Произошло добавление следующих строк: ')
-    #     for item in send_add:
-    #         sendMes(392812944, item)
-    # if len(send_del) != 0:
-    #     send_del.insert(0, 'Произошло удаление следующих строк: ')
-    #     for item in send_del:
-    #         sendMes(392812944, item)
     return namesTables
 
 
