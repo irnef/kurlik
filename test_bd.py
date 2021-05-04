@@ -1,5 +1,6 @@
 import difflib
-from datetime import datetime, strftime
+import json
+from datetime import datetime
 
 from sqlalchemy import create_engine, MetaData, Table, text
 
@@ -31,27 +32,16 @@ def makeMeta(engine):
 
 
 def getScripts(engine):
+    res = {}
     metadata_testBD = makeMeta(engine_testBD)
-    tables_n = []  # имена таблиц
-    tables = []  # объекты таблиц
+    for t in metadata_testBD.tables.keys():
+        table = Table(t, metadata_testBD, autoload=True, autoload_with=engine)
+        res[t] = {j.name: j.type for j in table.columns}
+
     fileName = datetime.strftime(datetime.now(), '%Y-%m-%dt%H-%M-%S.txt')
     print(fileName)
-    file = open(fileName, "w")
-    keys = metadata_testBD.tables.keys()  # получение наименований таблиц
-    tables_n = [key for key in keys] # запись наименований таблиц в список
-    # print(tables_n) # печать наименований всех таблиц
-    # for i in metadata.tables:
-    for n in range(len(tables_n)):
-        name_t = tables_n[n]
-        table = Table(name_t, metadata_testBD, autoload=True, autoload_with=engine)
-        # print('Имя таблицы: ', tables_n[n])  # вывод информации о всех колонках каждой таблицы
-        file.write('Имя таблицы: ' + tables_n[n] + '\n')
-        for j in table.columns:
-            #   print(j.name, j.type)
-            file.write(str(j.name) + ', type: ' + str(j.type) + '\n')
-
-    file.close()
-    return file
+    with open(fileName, "w") as file:
+        json.dump(file)
     # print()
 
 
