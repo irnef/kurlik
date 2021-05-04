@@ -1,11 +1,8 @@
-from sqlalchemy import create_engine, MetaData, Table, text
-from datetime import datetime
-from sqlalchemy.connectors import pyodbc
 import difflib
-import numpy as np
-from pathlib import Path
+from datetime import datetime
 
-# import tbot
+from sqlalchemy import create_engine, MetaData, Table, text
+
 
 server = 'IRNEF\SQLEXPRESS'
 database_testBD = 'test_bd'

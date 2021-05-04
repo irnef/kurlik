@@ -1,10 +1,10 @@
 import threading
+import re
 
 import telebot
 
 import test_bd
 
-import re
 
 bot = telebot.TeleBot('1641457298:AAEXwjDb83msBchf8e7UxPLYCvBq8tG-Uec')
 bot.send_message(392812944, 'Запуск')  # отправка сообщения по id пользователя
