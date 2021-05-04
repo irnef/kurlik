@@ -1,5 +1,5 @@
 import difflib
-from datetime import datetime
+from datetime import datetime, strftime
 
 from sqlalchemy import create_engine, MetaData, Table, text
 
@@ -21,7 +21,6 @@ def makeConnection(engine):
         print("Connection done")
     except ConnectionError as e:
         print("The error '{e}' occurred")
-
     return conn
 
 
@@ -35,11 +34,8 @@ def getScripts(engine):
     metadata_testBD = makeMeta(engine_testBD)
     tables_n = []  # имена таблиц
     tables = []  # объекты таблиц
-    currentDate = datetime.now().date()
-    currentTime = datetime.now().time()
-    print(currentDate)
-    fileName = str(currentDate) + 't' + str(currentTime.hour) + '-' + str(currentTime.minute) + '-' + str(
-        currentTime.second) + ".txt"
+    fileName = datetime.strftime(datetime.now(), '%Y-%m-%dt%H-%M-%S.txt')
+    print(fileName)
     file = open(fileName, "w")
     keys = metadata_testBD.tables.keys()  # получение наименований таблиц
     for key in keys:
