@@ -38,8 +38,7 @@ def getScripts(engine):
     print(fileName)
     file = open(fileName, "w")
     keys = metadata_testBD.tables.keys()  # получение наименований таблиц
-    for key in keys:
-        tables_n.append(key)  # запись наименований таблиц в список
+    tables_n = [key for key in keys] # запись наименований таблиц в список
     # print(tables_n) # печать наименований всех таблиц
     # for i in metadata.tables:
     for n in range(len(tables_n)):
