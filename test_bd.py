@@ -108,19 +108,8 @@ def getData(depsId):
 
     # print(result.fetchall())  # отрабатывает при запуске select
 
+#def checkPas():
 
-# def compareFiles(file1, file2):  # выводит в 3 файл то, что в первом входном отличаетя от второго, удаленные элементы
-#     # не выводит
-#     with open(file1, 'r') as f1:
-#         d = set(f1.readlines())
-#
-#     with open(file2, 'r') as f2:
-#         e = set(f2.readlines())
-#
-#     open('file3.txt', 'a').close()
-#     with open('file3.txt', 'a') as f:
-#         for line in list(d - e):
-#             f.write(line)
 
 
 def compareDiff(file1, file2):

@@ -15,7 +15,7 @@ bot.send_message(392812944, 'Запуск')  # отправка сообщени
 
 dataReg = []
 keyboard1 = telebot.types.ReplyKeyboardMarkup(True, True)
-keyboard1.row('Зарегистрироваться', 'Авторизироваться', 'Гость')
+keyboard1.row('Зарегистрироваться')
 
 
 @bot.message_handler(commands=['start'])
@@ -29,8 +29,10 @@ messagel = []
 
 @bot.message_handler(content_types=['text'])
 def send_text(message):
-    messagel.append(str(message.text))
-    print(messagel)
+    global messagel
+    try:
+        messagel.append(str(message.text))
+        print(messagel)
     # if message.text == 'Курлык':
     #     bot.send_message(message.chat.id, 'Хы, курлык')
     # elif message.text == 'Пока':
@@ -43,41 +45,47 @@ def send_text(message):
     #     bot.send_sticker(message.chat.id, 'CAACAgIAAxkBAAMlYE9lizdxS_7RVlla7BVA5LBHXvcAArsAA_cCyA9kl0GTZTAcwB4E')
     # elif message.text == 'Милый котик':
     #     bot.send_sticker(message.chat.id, 'CAACAgIAAxkBAAMzYE9pEfdhse-QG1icaeF0xRSlYIwAArgAAzDUnRH3ZYYNzwzrFR4E')
-    if message.text == 'курлык':
-        bot.send_message(message.chat.id, 'привет')
-        test_bd.getData(3)
-    elif message.text == 'Гость':
-        bot.send_message(message.chat.id, 'Хы')
-    elif message.text == 'Зарегистрироваться':
-        bot.send_message(message.chat.id, 'Введите свою фамилию: ')
-        register(messagel, message)
-    elif messagel[len(messagel) - 2] == 'Зарегистрироваться':
-        bot.send_message(message.chat.id, 'Введите свое имя: ')
-        register(messagel, message)
-    elif messagel[len(messagel) - 3] == 'Зарегистрироваться':
-        bot.send_message(message.chat.id, 'Введите свое отчество: ')
-        register(messagel, message)
-    elif messagel[len(messagel) - 4] == 'Зарегистрироваться':
-        bot.send_message(message.chat.id, 'Введите свою должность (1 - управляющая, 0 - нет): ')
-        register(messagel, message)
-    elif messagel[len(messagel) - 5] == 'Зарегистрироваться':
-        bot.send_message(message.chat.id, 'Введите id своего департамента (2 - Маркетинг, 3 - Работа с клиентами, '
+        if message.text == 'курлык':
+            bot.send_message(message.chat.id, 'привет')
+            test_bd.getData(3)
+        elif message.text == 'Гость':
+            bot.send_message(message.chat.id, 'Хы')
+        elif message.text == 'Зарегистрироваться':
+            bot.send_message(message.chat.id, 'Введите свою фамилию: ')
+            register(messagel, message)
+        # elif message.text == 'Авторизироваться':
+        #     bot.send_message(message.chat.id, 'Введите пароль: ')
+        # elif messagel[len(messagel) - 2] == 'Авторизироваться':
+        #     # проверка пароля
+        #     print('Проверка пароля')
+        elif messagel[len(messagel) - 2] == 'Зарегистрироваться':
+            bot.send_message(message.chat.id, 'Введите свое имя: ')
+            register(messagel, message)
+        elif messagel[len(messagel) - 3] == 'Зарегистрироваться':
+            bot.send_message(message.chat.id, 'Введите свое отчество: ')
+            register(messagel, message)
+        elif messagel[len(messagel) - 4] == 'Зарегистрироваться':
+            bot.send_message(message.chat.id, 'Введите свою должность (1 - управляющая, 0 - нет): ')
+            register(messagel, message)
+        elif messagel[len(messagel) - 5] == 'Зарегистрироваться':
+            bot.send_message(message.chat.id, 'Введите id своего департамента (2 - Маркетинг, 3 - Работа с клиентами, '
                                           '4 - Закупки): ')
-        register(messagel, message)
-    elif messagel[len(messagel) - 6] == 'Зарегистрироваться':
-        bot.send_message(message.chat.id, 'Введите свой email: ')
-        register(messagel, message)
-    elif messagel[len(messagel) - 7] == 'Зарегистрироваться':
-        bot.send_message(message.chat.id, 'Введите свой телефонный номер: ')
-        register(messagel, message)
-    elif messagel[len(messagel) - 8] == 'Зарегистрироваться':
-        bot.send_message(message.chat.id, 'Введите пароль: ')
-        print(message.from_user.id)
-        register(messagel, message)
-    elif message.text == 'Авторизироваться':
-        bot.send_message(message.chat.id, 'Хы')
-    else:
-        register(messagel, message)
+            register(messagel, message)
+        elif messagel[len(messagel) - 6] == 'Зарегистрироваться':
+            bot.send_message(message.chat.id, 'Введите свой email: ')
+            register(messagel, message)
+        elif messagel[len(messagel) - 7] == 'Зарегистрироваться':
+            bot.send_message(message.chat.id, 'Введите свой телефонный номер: ')
+            register(messagel, message)
+        elif messagel[len(messagel) - 8] == 'Зарегистрироваться':
+            bot.send_message(message.chat.id, 'Введите пароль: ')
+            print(message.from_user.id)
+            register(messagel, message)
+        else:
+            register(messagel, message)
+    except IndexError:
+        bot.send_message(message.chat.id, 'Ошибка ввода, попробуйте заново')
+        messagel = []
 
 
 def register(messagel, message):
@@ -177,41 +185,43 @@ def sendWarning(tablesDep):
     # print(namesTables)  # названия измененных таблиц
     # print(columnsTables)  # измененные колонки таблиц
     for index, name in enumerate(namesTables):
+        flag = False
         userId = departIdUser[index][1]
         print(userId)
-        if len(delTable) != 0:
+        if len(delTable) != 0 or len(namesTables) != 0:
             for i, it in enumerate(delTable):
                 if delTable[i] == namesTables[index]:
                     sendMes(userId, 'Таблица ' + namesTables[index] + ' удалена')
+                    flag = True
+            if flag:
                 continue
-        else:
-            for i in columnsTables[index]:
-                if '^' in i and '?' in item:  # фильтр по изменению
-                    send_change.append(i)
-                elif '+' in i and '^' not in item:  # фильтр по добавлению
-                    send_add.append(i)
-                elif '-' in i and '^' not in item:  # фильтр по удалению
-                    send_del.append(i)
-            sendMes(userId, '***************************************')
-            if len(send_change) != 0:
-                send_change.insert(0, 'Произошло изменение в следующих полях: ')
-                for item1 in send_change:
-                    sendMes(userId, item1)
-            sendMes(userId, '***************************************')
-            if len(send_add) != 0:
-                send_add.insert(0, 'Произошло добавление следующих полей: ')
-                send_add.insert(0, 'Таблица: ' + namesTables[index])
-                for item1 in send_add:
-                    sendMes(userId, item1)
-            sendMes(userId, '***************************************')
-            if len(send_del) != 0:
-                send_del.insert(0, 'Произошло удаление следующих полей: ')
-                for item1 in send_del:
-                    sendMes(userId, item1)
-        # if len(delTable) != 0:
-        #     delTable.insert(0, 'Были удалены следующие таблицы: ')
-        #     for item1 in delTable:
-        #         sendMes(userId, item1)
+            else:
+                for ind, i in enumerate(columnsTables[index]):
+                    if '?' in i:  # фильтр по
+                        # изменению
+                        send_change.append(columnsTables[index][ind - 1])
+                        send_change.append(columnsTables[index][ind - 2])
+                        # send_change.append(i)
+                        break
+                    elif '+' in i and '^' not in i:  # фильтр по добавлению
+                        send_add.append(i)
+                    elif '-' in i and '^' not in i:  # фильтр по удалению
+                        send_del.append(i)
+                if len(send_change) != 0:
+                    send_change.insert(0, 'Произошло изменение в следующих полях: ')
+                    send_change.insert(0, 'Таблица: ' + namesTables[index])
+                    for item1 in send_change:
+                        sendMes(userId, item1)
+                if len(send_add) != 0:
+                    send_add.insert(0, 'Произошло добавление следующих полей: ')
+                    send_add.insert(0, 'Таблица: ' + namesTables[index])
+                    for item1 in send_add:
+                        sendMes(userId, item1)
+                if len(send_del) != 0:
+                    send_del.insert(0, 'Произошло удаление следующих полей: ')
+                    send_del.insert(0, 'Таблица: ' + namesTables[index])
+                    for item1 in send_del:
+                        sendMes(userId, item1)
         send_add = []  # сюда отфильтровываются только данные по добавлению
         send_del = []  # сюда отфильтровываются только данные по удалению
         send_change = []  # сюда отфильтровываются только данные по изменению
@@ -237,8 +247,6 @@ def sendWarning(tablesDep):
     #     for item in send_del:
     #         sendMes(392812944, item)
     return namesTables
-
-    # threading.Timer(600, sendWarning()).start()
 
 
 def call_repeatedly(interval, func, *args):
