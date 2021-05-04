@@ -80,17 +80,21 @@ def insData(tableName, tableColumns, values):
 
     # cursor = conn.cursor()
     # t = text("select * from Users")
-
-    test = "insert into " + tableName + tableColumns + " values ('" + str(
+    try:
+        test = "insert into " + tableName + tableColumns + " values ('" + str(
         values[0]) + "', '" + str(values[1]) + "', '" + str(
         values[2]) + "', " + str(values[3]) + ", " + str(values[4]) + ", '" + str(values[5]) + "', '" + str(
         values[6]) + "','" + str(values[7]) + "','" + str(values[8]) + "')"
 
-    t = text(test)
-    result = conn_BMS.execute(t)
+        t = text(test)
+        result = conn_BMS.execute(t)
+        return result
+    except Exception:
+        print('Ошибка ввода данных')
+        return 'Error'
     # print(result.fetchall()) # отрабатывает при запуске select
     # conn.commit() # connection object has no attribute 'commit', но без него данные пишутся
-    return result
+
 
 
 def getData(depsId):

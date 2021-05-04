@@ -97,7 +97,9 @@ def register(messagel, message):
     if len(dataReg) == 8:
         print('Вызвалась')
         dataReg.append(message.from_user.id)
-        test_bd.insData(test_bd.tableName, test_bd.tableColumns, dataReg)
+        res = test_bd.insData(test_bd.tableName, test_bd.tableColumns, dataReg)
+        if res == 'Error':
+            bot.send_message(message.chat.id, 'Ошибка ввода данных, попробуйте зарегистрироваться еще раз')
         dataReg.clear()
     print('dataReg', dataReg)
     return dataReg
