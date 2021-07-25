@@ -3,36 +3,33 @@ import sqlite3 as sq
 from datetime import datetime
 
 import sqlalchemy as sa
-# server = 'IRNEF\SQLEXPRESS'
-# database_testBD = 'test_bd'
-# database_BMS = 'BMS'
 
 
-def makeEngine():
+def makeEngine(bd):
     try:
-        engine = sa.create_engine('sqlite:///prob_bd.db')
+        engine = sa.create_engine('sqlite:///' + bd)
         print('Engine OK')
     except:
         print('Engine Error')
     return engine
 
 
-def makeConnection():
+def makeConnection(bd):
     try:
-        conn = sq.connect('prob_bd.db')
+        conn = sq.connect(bd)
         print("Connection done")
-        # print("The error '{e}' occurred")
-    except:
+        return conn
+    except ConnectionError as e:
         print("Error connection")
         # print("The error '{e}' occurred")
-    return conn
 
 
 def createCurs(conn):
     crs = conn.cursor()
-    crs.execute('''select * from Users''')
-    print(crs.fetchall())
+    #  crs.execute('''select * from Users''')  # Строка для теста
+    #  print(crs.fetchall())
     conn.commit()
+    return crs
 
 
 def makeMeta(engine):
@@ -91,6 +88,7 @@ tableName = 'Users'
 tableColumns = ' (surName, name, midName, isHead, departmentId, email, phoneNumber, pass, userIdBot) '
 values1 = " ('Демидов', 'Артем', 'Андреевич', 1, 1, '123','123','123') "
 
+
 # def insData(tableName, tableColumns, values):
 #     # del values[4]
 #     values[3] = int(values[3])
@@ -119,20 +117,25 @@ values1 = " ('Демидов', 'Артем', 'Андреевич', 1, 1, '123','
 #     # conn.commit() # connection object has no attribute 'commit', но без него данные пишутся
 
 
-# def getData(depsId):
-#     print(depsId)
-#     departIdUser = []
-#     engine_BMS1 = makeEngine(server, database_BMS)
-#     conn_BMS1 = makeConnection(engine_BMS1)
-#     for i, dep in enumerate(depsId):
-#         dep_s = ''.join(depsId[i])
-#         t = text("select departmentId, userIdBot from Users where departmentId = " + dep_s)
-#         result = conn_BMS1.execute(t)
-#         for j in result:
-#             departIdUser.append(j)
-#     return departIdUser
-
-# print(result.fetchall())  # отрабатывает при запуске select
+def getData(depsid):
+    print(depsid)
+    departIdUser = []
+    connSysBd = makeConnection(sysBD)
+    crs = connSysBd.cursor()
+    for i, dep in enumerate(depsid):
+        dep_s = ''.join(depsid[i])
+        print(dep_s)
+        # t = sa.text("select departmentId, userIdBot from Users where departmentId = " + dep_s)
+        t = '''select departmentId, userIdBot from Users where departmentId = '''
+        crs.execute('''select departmentId, userIdBot from Users where departmentId = 1''')
+        result = []
+        #  crs.execute('''select * from Users''')  # Строка для теста
+        print(crs.fetchall())
+        for j in result:
+            departIdUser.append(j)
+    connSysBd.commit()
+    connSysBd.close()
+    return departIdUser
 
 
 # def checkPas():
@@ -140,24 +143,18 @@ values1 = " ('Демидов', 'Артем', 'Андреевич', 1, 1, '123','
 
 def compareDiff(file1, file2):
     diff = difflib.ndiff(open(file1).readlines(), open(file2).readlines())
-#     # print(*diff)
-#     # my_file = Path("C:/Users/user/Documents/file3.txt")
     file = open('file3.txt', 'w')
     file1 = open('test.txt', 'w')
     for i in diff:
         file.write(i)
         file1.write(i)
-#     # if my_file.exists():
-#     #     print('нашел')
-#     #     tbot.sendMes(392812944, 'привет')
 
 
-# engine_testBD = makeEngine(server, database_testBD)  # создание объекта бд, с которой нужно получать скрипты
-conn_testBD = makeConnection()
-createCurs(conn_testBD)
-engineLite = makeEngine()
-makeMeta(engineLite)
-compareDiff('2021-04-23t17-30-43.txt', '2021-07-25t13-31-03.txt')
+sysBD = 'prob_bd.db'  # Системная БД
+clientBD = 'test_bd_lite.db'  # Клиентская БД (обрабатываемая БД)
+#  conn_testBD = makeConnection('prob_bd.db')
+#  createCurs(conn_testBD)
+engineSysBd = makeEngine('prob_bd.db')
 
 # c = metadata.tables[j]
 # for i in c:
@@ -173,5 +170,3 @@ compareDiff('2021-04-23t17-30-43.txt', '2021-07-25t13-31-03.txt')
 # result1 = cursor.fetchall()
 # for i in result:
 #   print(i)
-
-conn_testBD.close()

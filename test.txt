@@ -1,16 +1,16 @@
 - NameTable: Category
-+ Имя таблицы: Company
++ TableName: Company
 + companyId, type: INTEGER
 + name, type: TEXT
 + description, type: TEXT
 + isMain, type: BOOLEAN
 + location, type: TEXT
-+ Имя таблицы: Department
++ TableName: Department
 + name, type: TEXT
 + description, type: TEXT
 + companyId, type: INTEGER
 + departmentId, type: INTEGER
-+ Имя таблицы: Resources
++ TableName: Resources
 + resId, type: INTEGER
 + name, type: TEXT
 + description, type: TEXT
@@ -19,7 +19,7 @@
 + url, type: TEXT
 + resTypeId, type: INTEGER
 + departmentId, type: INTEGER
-+ Имя таблицы: TaskBoard
++ TableName: TaskBoard
 - id, type: INTEGER
 ? ^
 + tbId, type: INTEGER
@@ -31,7 +31,7 @@
 ? ^
 + userId, type: INTEGER
 ? ^^^^^
-+ Имя таблицы: Users
++ TableName: Users
 + surName, type: TEXT
 + name, type: TEXT
 + midName, type: TEXT
@@ -101,14 +101,14 @@
 + pass, type: TEXT
 + userIdBot, type: FLOAT
 + userId, type: INTEGER
-+ Имя таблицы: resType
++ TableName: resType
 + resTypeId, type: INTEGER
 + name, type: TEXT
-+ Имя таблицы: sqlite_stat1
++ TableName: sqlite_stat1
 + tbl, type: NULL
 + idx, type: NULL
 + stat, type: NULL
-+ Имя таблицы: sqlite_stat4
++ TableName: sqlite_stat4
 + tbl, type: NULL
 + idx, type: NULL
 + neq, type: NULL

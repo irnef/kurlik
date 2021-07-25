@@ -118,7 +118,7 @@ file_names = ['2021-04-23t17-30-43.txt']  # создаем массив, в ко
 
 def sendWarning(tablesDep):
     userId = 392812944
-    file = test_bd.getScripts(test_bd.engine_testBD)
+    file = test_bd.makeMeta(test_bd.engineSysBd)
     print(file.name)
     with open(file.name, 'r') as f:
         nums = f.read().splitlines()
@@ -142,27 +142,27 @@ def sendWarning(tablesDep):
     delTable = []
     for i, a in enumerate(data_file):
         if ('^' in a and '?' in a) or ('+' in a and '^' not in a) or ('-' in a and '^' not in a):
-            if 'Имя таблицы:' in a:
-                if '- Имя таблицы: ' in a:
-                    m = re.match('.\s*(\w+) (\w+): (\w+)', str(a))
-                    delTable.append(m[3])
-                    namesTables.append(m[3])  # заполняем массив имен таблиц
+            if 'NameTable:' in a:
+                if '- NameTable: ' in a:
+                    m = re.match('.\s*(\w+): (\w+)', str(a))
+                    delTable.append(m[2])
+                    namesTables.append(m[2])  # заполняем массив имен таблиц
                     # print(m[3])
                     columnsTables.append([a])  # заполняем имена таблиц в массиве колонок (чтобы потом удалить)
                 else:
-                    m = re.match('.\s*(\w+) (\w+): (\w+)', str(a))
-                    namesTables.append(m[3])  # заполняем массив имен таблиц
+                    m = re.match('.\s*(\w+): (\w+)', str(a))
+                    namesTables.append(m[2])  # заполняем массив имен таблиц
                     # print(m[3])
                     columnsTables.append([a])  # заполняем имена таблиц в массиве колонок (чтобы потом удалить)
             else:
                 if len(namesTables) == 0:
                     n = i
-                    while '  Имя таблицы:' not in data_file[n]:
+                    while '  NameTable:' not in data_file[n]:
                         n -= 1
                     print(data_file[n])
-                    m = re.match('.\s*(\w+) (\w+): (\w+)', str(data_file[n]))
+                    m = re.match('.\s*(\w+): (\w+)', str(data_file[n]))
                     print(m[3])
-                    namesTables.append(m[3])
+                    namesTables.append(m[2])
                     columnsTables.append(
                         [data_file[n]])  # заполняем имена таблиц в массиве колонок (чтобы потом удалить)
                     a = data_file[int(i)]
@@ -176,8 +176,10 @@ def sendWarning(tablesDep):
         y = [x['dep'] for x in tablesDep if x['table_name'] == table]  # получили номера департаментов,
         # пользователи которых должны получить уведомления
         deps.append(y)
-    departIdUser = test_bd.getData(deps)
-
+    departIdUser = test_bd.getData(deps)  # Определение пользователей, которые должны получить
+    # уведомления в
+    # зависимости от департамента
+    #  departIdUser = 392812944
     print(namesTables)  # индексы названий таблиц соответствуют индексам депратаментов, индексам idUser и даннымв
     # списке columnsTables
     print(columnsTables)
@@ -255,7 +257,7 @@ def call_repeatedly(interval, func, *args):
     return stopped.set
 
 
-namesTablesDep = [{'table_name': 'Category', 'dep': ''}, {'table_name': 'Customer', 'dep': '2'},  # заменить
+namesTablesDep = [{'table_name': 'Category', 'dep': '3'}, {'table_name': 'Customer', 'dep': '2'},  # заменить
                   # департамент таблицы Customer на 3
                   {'table_name': 'Fabricator', 'dep': '4'}, {'table_name': 'Gender', 'dep': '3'},
                   {'table_name': 'Orders', 'dep': '3'}, {'table_name': 'Product', 'dep': '2'},
