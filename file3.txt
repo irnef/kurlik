@@ -1,0 +1,117 @@
+- NameTable: Category
++ Имя таблицы: Company
++ companyId, type: INTEGER
++ name, type: TEXT
++ description, type: TEXT
++ isMain, type: BOOLEAN
++ location, type: TEXT
++ Имя таблицы: Department
++ name, type: TEXT
++ description, type: TEXT
++ companyId, type: INTEGER
++ departmentId, type: INTEGER
++ Имя таблицы: Resources
++ resId, type: INTEGER
++ name, type: TEXT
++ description, type: TEXT
++ ipAddress, type: TEXT
++ port, type: TEXT
++ url, type: TEXT
++ resTypeId, type: INTEGER
++ departmentId, type: INTEGER
++ Имя таблицы: TaskBoard
+- id, type: INTEGER
+? ^
++ tbId, type: INTEGER
+? ^^^
++ name, type: TEXT
+- nameCategory, type: VARCHAR(30) COLLATE "Cyrillic_General_CI_AS"
+- NameTable: Customer
+- id, type: INTEGER
+? ^
++ userId, type: INTEGER
+? ^^^^^
++ Имя таблицы: Users
++ surName, type: TEXT
++ name, type: TEXT
++ midName, type: TEXT
++ isHead, type: BOOLEAN
+- FIO, type: VARCHAR(70) COLLATE "Cyrillic_General_CI_AS"
+- dtCreate, type: DATE
+- login, type: VARCHAR(15) COLLATE "Cyrillic_General_CI_AS"
+- password, type: VARCHAR(15) COLLATE "Cyrillic_General_CI_AS"
+- dtBirth, type: DATE
+- idGender, type: INTEGER
+- NameTable: Gender
+- id, type: INTEGER
+- nameGender, type: VARCHAR(10) COLLATE "Cyrillic_General_CI_AS"
+- NameTable: Fabricator
+- id, type: INTEGER
+- nameFabricator, type: VARCHAR(20) COLLATE "Cyrillic_General_CI_AS"
+- email, type: VARCHAR(20) COLLATE "Cyrillic_General_CI_AS"
+- phoneNumber, type: VARCHAR(20) COLLATE "Cyrillic_General_CI_AS"
+- country, type: VARCHAR(20) COLLATE "Cyrillic_General_CI_AS"
+- NameTable: Orders
+- id, type: INTEGER
+- dtCreate, type: DATE
+- idStatus, type: INTEGER
+- costOrder, type: MONEY
+- idCustomer, type: INTEGER
+- addressDelivery, type: VARCHAR(40) COLLATE "Cyrillic_General_CI_AS"
+- NameTable: Status
+- id, type: INTEGER
+- nameStatus, type: VARCHAR(40) COLLATE "Cyrillic_General_CI_AS"
+- description, type: VARCHAR(70) COLLATE "Cyrillic_General_CI_AS"
+- NameTable: Product
+- id, type: INTEGER
+- costProduct, type: MONEY
+- idFabricator, type: INTEGER
+- idSupplier, type: INTEGER
+- idSize, type: INTEGER
+- idCategory, type: INTEGER
+- description, type: VARCHAR(20) COLLATE "Cyrillic_General_CI_AS"
+- idOrder, type: INTEGER
+- NameTable: Size
+- id, type: INTEGER
+- nameSize, type: VARCHAR(10) COLLATE "Cyrillic_General_CI_AS"
+- NameTable: Supplier
+- id, type: INTEGER
+- nameSupplier, type: VARCHAR(20) COLLATE "Cyrillic_General_CI_AS"
+- email, type: VARCHAR(20) COLLATE "Cyrillic_General_CI_AS"
+- phoneNumber, type: VARCHAR(10) COLLATE "Cyrillic_General_CI_AS"
+- NameTable: sysdiagrams
+- name, type: NVARCHAR(128) COLLATE "Cyrillic_General_CI_AS"
+- principal_id, type: INTEGER
+- diagram_id, type: INTEGER
+- version, type: INTEGER
+- definition, type: VARBINARY
+- NameTable: test_table
+- id, type: INTEGER
+- pid, type: INTEGER
+- title, type: VARCHAR(256) COLLATE "Cyrillic_General_CI_AS"
+- NameTable: tree_sample
+- id, type: INTEGER
+- id_parent, type: INTEGER
+? - ^
++ departmentId, type: INTEGER
+?  ^   ++   ++
+- nm, type: VARCHAR(31) COLLATE "Cyrillic_General_CI_AS"
++ email, type: TEXT
++ phoneNumber, type: TEXT
++ pass, type: TEXT
++ userIdBot, type: FLOAT
++ userId, type: INTEGER
++ Имя таблицы: resType
++ resTypeId, type: INTEGER
++ name, type: TEXT
++ Имя таблицы: sqlite_stat1
++ tbl, type: NULL
++ idx, type: NULL
++ stat, type: NULL
++ Имя таблицы: sqlite_stat4
++ tbl, type: NULL
++ idx, type: NULL
++ neq, type: NULL
++ nlt, type: NULL
++ ndlt, type: NULL
++ sample, type: NULL

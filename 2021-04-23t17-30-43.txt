@@ -1,7 +1,7 @@
-Имя таблицы: Category
+NameTable: Category
 id, type: INTEGER
 nameCategory, type: VARCHAR(30) COLLATE "Cyrillic_General_CI_AS"
-Имя таблицы: Customer
+NameTable: Customer
 id, type: INTEGER
 FIO, type: VARCHAR(70) COLLATE "Cyrillic_General_CI_AS"
 dtCreate, type: DATE
@@ -9,27 +9,27 @@ login, type: VARCHAR(15) COLLATE "Cyrillic_General_CI_AS"
 password, type: VARCHAR(15) COLLATE "Cyrillic_General_CI_AS"
 dtBirth, type: DATE
 idGender, type: INTEGER
-Имя таблицы: Gender
+NameTable: Gender
 id, type: INTEGER
 nameGender, type: VARCHAR(10) COLLATE "Cyrillic_General_CI_AS"
-Имя таблицы: Fabricator
+NameTable: Fabricator
 id, type: INTEGER
 nameFabricator, type: VARCHAR(20) COLLATE "Cyrillic_General_CI_AS"
 email, type: VARCHAR(20) COLLATE "Cyrillic_General_CI_AS"
 phoneNumber, type: VARCHAR(20) COLLATE "Cyrillic_General_CI_AS"
 country, type: VARCHAR(20) COLLATE "Cyrillic_General_CI_AS"
-Имя таблицы: Orders
+NameTable: Orders
 id, type: INTEGER
 dtCreate, type: DATE
 idStatus, type: INTEGER
 costOrder, type: MONEY
 idCustomer, type: INTEGER
 addressDelivery, type: VARCHAR(40) COLLATE "Cyrillic_General_CI_AS"
-Имя таблицы: Status
+NameTable: Status
 id, type: INTEGER
 nameStatus, type: VARCHAR(40) COLLATE "Cyrillic_General_CI_AS"
 description, type: VARCHAR(70) COLLATE "Cyrillic_General_CI_AS"
-Имя таблицы: Product
+NameTable: Product
 id, type: INTEGER
 costProduct, type: MONEY
 idFabricator, type: INTEGER
@@ -38,25 +38,25 @@ idSize, type: INTEGER
 idCategory, type: INTEGER
 description, type: VARCHAR(20) COLLATE "Cyrillic_General_CI_AS"
 idOrder, type: INTEGER
-Имя таблицы: Size
+NameTable: Size
 id, type: INTEGER
 nameSize, type: VARCHAR(10) COLLATE "Cyrillic_General_CI_AS"
-Имя таблицы: Supplier
+NameTable: Supplier
 id, type: INTEGER
 nameSupplier, type: VARCHAR(20) COLLATE "Cyrillic_General_CI_AS"
 email, type: VARCHAR(20) COLLATE "Cyrillic_General_CI_AS"
 phoneNumber, type: VARCHAR(10) COLLATE "Cyrillic_General_CI_AS"
-Имя таблицы: sysdiagrams
+NameTable: sysdiagrams
 name, type: NVARCHAR(128) COLLATE "Cyrillic_General_CI_AS"
 principal_id, type: INTEGER
 diagram_id, type: INTEGER
 version, type: INTEGER
 definition, type: VARBINARY
-Имя таблицы: test_table
+NameTable: test_table
 id, type: INTEGER
 pid, type: INTEGER
 title, type: VARCHAR(256) COLLATE "Cyrillic_General_CI_AS"
-Имя таблицы: tree_sample
+NameTable: tree_sample
 id, type: INTEGER
 id_parent, type: INTEGER
 nm, type: VARCHAR(31) COLLATE "Cyrillic_General_CI_AS"

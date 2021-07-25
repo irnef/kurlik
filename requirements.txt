@@ -1,2 +1,4 @@
 pyTelegranBotAPI=3.6.6
-sqlalchemy
+sqlalchemy~=1.4.17
+
+telebot~=0.0.4
